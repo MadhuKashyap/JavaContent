@@ -1,6 +1,6 @@
-﻿Shared with:
-New Practice
+
 Multithreading in java
+
 CHAPTER 1 : CONCURRENCY
 
  JAVA platform is designed to support concurrent programming . Since version 5.0 java platform has included high level concurrency API  java.util.concurrent that contains many classes and interfaces to facilitate multiprogramming .
@@ -306,7 +306,7 @@ CHAPTER 13 : FORK/JOIN
         ◦ It deals with tasks that produce subtasks  which run parallely on different cores. The result from each subtask is aggregated to form the final result.
         ◦ Each thread has it's own queue(dequeue) that keeps track of the tasks assigned that queue.
         ◦ Fork/Join performs work stealing . Suppose Thread1 has executed all of the tasks in it's local queue and is sitting idle but their are few tasks remaining for Thread2 .In this case Thread1 steals tasks from Thread2 .If Thread2 pics it's tasks from front end of queue , Thread1 will steal from rear end.
-Edit
+
 
 
 
