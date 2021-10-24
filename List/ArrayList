@@ -1,0 +1,74 @@
+package main;
+
+import java.util.*;
+
+class Student implements Comparator<Student>
+{
+    int id;
+    double avg;
+    String name;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public double getAvg() {
+        return avg;
+    }
+
+    public void setAvg(double avg) {
+        this.avg = avg;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    Student(int id, double avg, String name)
+    {
+        this.id=id;
+        this.avg=avg;
+        this.name=name;
+    }
+    Student()
+    {}
+    @Override
+    public int compare(Student s1,Student s2)
+    {
+        return s1.id-s2.id;
+    }
+    public String toString()
+    {
+        String s = this.getId() + " "+this.getAvg()+" "+this.getName();
+        return s;
+    }
+}
+
+public class ArrayListImp {
+    public static void main(String[] args) {
+        List<Student> lis=new ArrayList<>();
+        lis.add((new Student(2,19.2,"Rushali")));
+        lis.add((new Student(3,15.2,"Mitaali")));
+        lis.add((new Student(4,17.2,"Ruhani")));
+        lis.add((new Student(1,11.2,"Vaishali")));
+        System.out.println(lis.size());
+        lis.remove(3);
+        lis.add(3,new Student(1,11.2,"Vaishali"));
+        Collections.sort(lis,new Student());
+
+        Iterator it=lis.iterator();
+        while(it.hasNext())
+        {
+            System.out.println(it.next().toString());
+        }
+    }
+}
+
