@@ -1,0 +1,8 @@
+Arraylist                                                     |                          LINKLIST
+----------------------------------------------------------------------------------------------------------------------------------------------                                                              |
+1. This class uses a dynamic array to store the elements in it   |This class uses a doubly linked list to store the elements in it.                                                                            |
+2. Manipulating ArrayList takes O(N) time due to the internal     Manipulating ArrayList takes O(1) Time 
+   implementation.                                                                                                                            3.This class implements a List interface.                         This class implements a List interface and dequeue interface.
+4. This class works better when the application demands storing   This class works better when the application demands
+   the data and accessing it.                                     manipulating
+                                                              
