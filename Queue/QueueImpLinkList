@@ -1,0 +1,76 @@
+package main;
+
+import java.util.*;
+// No methods of Link List will work for queue implementation of List
+class Stu implements Comparator<Stu>
+{
+    int id;
+    String name;
+    double avg;
+    public Stu()
+    {}
+    public Stu(int id, String name, double avg) {
+        this.id = id;
+        this.name = name;
+        this.avg = avg;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getAvg() {
+        return avg;
+    }
+
+    public void setAvg(double avg) {
+        this.avg = avg;
+    }
+    public int compare(Stu s1,Stu s2)
+    {
+        return s1.id-s2.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Stu{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", avg=" + avg +
+                '}';
+    }
+}
+public class QueueImpLinkList {
+    public static void main(String[] args) {
+         Queue<Stu> q=new LinkedList<>();  //It is similar to LinkList implementation of queue.
+         q.add(new Stu(1,"bhi",11.11));
+        q.add(new Stu(3,"bhik",11.12));
+        q.add(new Stu(4,"bhiks",11.13));
+        q.add(new Stu(2,"bhiksa",11.14));
+
+        //1st method to iterate
+        Iterator it=q.iterator();
+
+        while(it.hasNext()) {
+            System.out.println(it.next());
+        }
+        //2nd method to iterate
+        while(!q.isEmpty())
+        {
+            System.out.println(q.poll());
+        }
+    }
+}
+

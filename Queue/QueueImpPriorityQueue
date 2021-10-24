@@ -1,0 +1,68 @@
+package main;
+
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+//Here queue is implemented as Priority queue i.e. smallest element will always be on top
+class Item implements Comparator<Item>
+{
+    int id;
+    double price;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Item(int id, double price) {
+        this.id = id;
+        this.price = price;
+    }
+    public Item()
+    {}
+    public int  compare(Item i1,Item i2)
+    {
+        return (int)(i1.price-i2.price);
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", price=" + price +
+                '}';
+    }
+}
+public class QueueImpPriorityQueue {
+    public static void main(String[] args) {
+        Queue<Item> q=new PriorityQueue<>(new Item());  //Priority Queue Implementation of queue
+        q.add(new Item(1,89.90));
+        q.add(new Item(2,91.99));
+        Iterator it=q.iterator();
+        while(it.hasNext())
+        {
+            System.out.println(it.next().toString());
+        }
+        System.out.println("Changing smallest element");
+        q.poll();
+        Iterator it1=q.iterator();
+        while(it1.hasNext())
+        {
+            System.out.println(it1.next());
+        }
+    }
+}
+
