@@ -1,0 +1,312 @@
+﻿Shared with:
+New Practice
+Multithreading in java
+CHAPTER 1 : CONCURRENCY
+
+ JAVA platform is designed to support concurrent programming . Since version 5.0 java platform has included high level concurrency API  java.util.concurrent that contains many classes and interfaces to facilitate multiprogramming .
+ 
+CHAPTER 2 : PROCESSES AND THREADS
+ 
+Concurrent programming has basically two units of execution : Processes and threads ,threads are more widely used.
+    •    Threads are light weight processes.
+    •    Creating a new thread requires fewer resources than creating a process.
+    •    Threads share processe's resources including memory and open files .
+    •    We can use thread objects in two ways , First by creating and managing Threads on our own or passing these overheads to EXECUTOR.
+ 
+CHAPTER 3 : DEFINING AND STARTING A THREAD
+ 
+Their are two ways to define and start a thread
+  3.1 Provide a Runnable object : Runnable contains a single method run() that decides what the threads will
+                                                                perform.Runnable object is passed to the thread constructor.
+                                              public class HelloRun implements Runnable{
+                                                      public void run(){
+                                                            S.O.P("Hello");
+                                                           }
+                                                     public static void main(String args[])
+                                                     {
+                                                               (new Thread(new HelloRun())).start();
+                                                       }
+                                                This is a more general practice because after implementing Runnable the class can 
+                                                still extend other classes as java doesn't support Multiple inheritance                                 
+  3.2 Subclass Thread :  
+       
+CHAPTER 4 : PAUSING EXECUTION WITH SLEEP
+ 
+    • Thread.sleep() causes the current thread to suspend execution for a specified period of time , this is an efficient practice for making processor time available for other threads.
+    • sleep() throws InterruptedException when other thread disturbs this thread while sleeping.
+ 
+CHAPTER 5 : INTERRUPTS
+ 
+    • An interrupt is an indication to a thread that it should stop what it's doing and do somthing else.
+    • A thread sends interrupt by invoking interrupt()  on the thread object that is to be interrupted.
+    • For the interrupt mechanism to work correctly ,the interrupted thread should support it's own interruption.
+    • Thread can support it's own interruption depending on what it is doing currently.
+    • If it is invoking a method that throws InterruptedException , it simply returns after catching the exception.
+    • If it is invoking a method that doesn't throw InterruptedException then it should call Thread.interrupted() which returns true if the thread is interrupted . IN case it is interrupted it returns.
+    • Thread.interrupted() works on the mechanism of an internal flag known as "Interrupt status".
+    • Invoking Thread.interrupt() sets this flag and Thread.interrupted() clears it
+CHAPTER 6 : SYNCHRONIZATION
+    • When two or more threads access the same resources we need the concept of synchronization to avoid thread interference and memory consistency errors . 
+                 6.1 Thread Interference  : It happens when operations of two different threads working on same           data  but different methods overlap.
+                    
+class Counter {
+    private int c = 0;
+
+    public void increment() {
+        c++;
+    }
+
+    public void decrement() {
+        c--;
+    }
+
+    public int value() {
+        return c;
+    }
+
+}
+Suppose Thread A invokes increment at about the same time Thread B invokes decrement. If the initial value of c is 0, their interleaved actions might follow this sequence:
+    1. Thread A: Retrieve c.
+    2. Thread B: Retrieve c.
+    3. Thread A: Increment retrieved value; result is 1.
+    4. Thread B: Decrement retrieved value; result is -1.
+    5. Thread A: Store result in c; c is now 1.
+    6. Thread B: Store result in c; c is now -1.
+Thread A's result is lost, overwritten by Thread B.
+       6.2 Memory consistency errors : This is said to occur when different threads have different views of the same data . This can be avoided by establishing a happens before relationship. This relation guarantees that for 2 or more consecutive actions , changes made by one thread will be reflected to another thread before it starts execution. Their are several actions that perform happens before relationship, one of them is synchronization.
+        6.3 Synchronized method :
+                            
+To make a method synchronized, simply add the synchronized keyword to its declaration:
+public class SynchronizedCounter {
+    private int c = 0;
+
+    public synchronized void increment() {
+        c++;
+    }
+
+    public synchronized void decrement() {
+        c--;
+    }
+
+    public synchronized int value() {
+        return c;
+    }
+}
+
+making these methods synchronized has two effects:
+    1. First, it is not possible for two invocations of synchronized methods on the same object . When one thread is executing a synchronized method for an object, all other threads that invoke synchronized methods for the same object will be blocked(suspend execution) until the first thread is done with the object. That means if thread 1 has to invoke increment and  thread 2 has to invoke decrement then thread 2 has to wait until thread 1 is done with it's operation and has performed the memory writes for c.
+    2. Second, when a synchronized method exits, it automatically establishes a happens-before relationship with any subsequent invocation of a synchronized method for the same object. This guarantees that changes to the state of the object are visible to all threads
+    • Final fields can be safely read through non-synchronized methods.
+         6.4 Intrinsic Locks and Synchronisation : Synchronization is built around an internal entity called intrinsic lock or monitor lock . Intrinsic locks play 2 roles
+                                                                                       1. Exclusive access to object's content
+                                                                                        2. Happens before relationship
+           
+    •  Every object has an intrinsic lock associated with it , The thread that has to acquire the access to object's fields has to acquire the object's intrinsic lock before it can access the fields. and then releases the locks when the work is done.
+    • As long as the thread owns the lock no other thread can acquire the lock on the same object or in other words it will be blocked when it tries to acquire the lock.
+    • When a thread releases the lock , a happens before relationship is established between that action and any susequent aquisition on the same lock.
+    • When a thread invokes a synchronised method , it automatically acquires the intrinsic lock for that method's object  and releases it when the method returns.
+    • When a static synchronized method is invoked , the thread acquires the lock for Class object thus access to class's static fields is controlled by that lock.
+     6.5 Synchronized blocks
+          Synchronized blocks is used to achieve fine grained synchronization .
+         
+public class MsLunch {
+    private long c1 = 0;
+    private long c2 = 0;
+    private Object lock1 = new Object();
+    private Object lock2 = new Object();
+
+    public void inc1() {
+        synchronized(lock1) {
+            c1++;
+        }
+    }
+
+    public void inc2() {
+        synchronized(lock2) {
+            c2++;
+        }
+    }
+}
+All updates of c1 and c2 must be synchronized, but there's no reason to prevent an update of c1 during an update of c2 — and doing so creats unnecessary blocking. 
+CHAPTER 7  : ATOMIC ACCESS
+ 
+    • Atomic actions happen all at once and doesn't stop in the middle .
+    • Atomic actions cannot be overlapped so they can be used without the fear of thread interference but they can cause memory consistency errors .
+    • One way to remove memory errors is to use volatile variables because they follow the happens before relationship with subsequent read and write of the same variable.
+    • But using simple atomic variables is more efficient than declaring variables inside a synchronized block.
+    • Declaring the entire block or method synchronized can lead to liveness issues
+    • So the big question arises how to make anything atomic?? 
+        ◦  java.util.concurrent.atomic defines classes that support atomic operations on variable.
+        ◦ java.util.concurrent.atomic.AtomicInteger class provides operations on underlying int that can  be read and written atomically.
+        ◦ AtomicInteger provides set() and get() methods that work like read() and write() on volatile variables i.e. set() has a happens before relationship with subsequent get() on same variable.
+        ◦ class SynchronizedCounter {
+              private int c = 0;
+          
+              public synchronized void increment() {
+                  c++;
+              }
+          
+              public synchronized void decrement() {
+                  c--;
+              }
+          
+              public synchronized int value() {
+                  return c;
+              }
+          
+          } 
+          
+          This code can be converted to AtomicInteger.
+          class AtomicCounter {
+              private AtomicInteger c = new AtomicInteger(0);
+          
+              public void increment() {
+                  c.incrementAndGet();
+              }
+          
+              public void decrement() {
+                  c.decrementAndGet();
+              }
+          
+              public int value() {
+                  return c.get();
+              }
+          
+          }
+CHAPTER  8 : GUARDED BLOCKS
+   
+    •   Guarded blocks keep checking for a particular condition to become true and only in that case the actual execution of thread resumes.
+    • The guarded block calls Object.wait() on the thread to suspend it's execution.
+    • The invocation of wait() does not return until another thread has issued a notification that some special event has occurred (though not necessarily the event this thread is waiting for).
+    • Always invoke wait() inside a loop that checks for the condition the thread has been waiting for, and don't assume that the interrupt was for the particular condition.
+    • When a wait() is invoked ,the thread releases the lock and suspends the execution. At some future time, another thread will acquire the same lock and invoke notifyAll() informing all the waiting threads that something has happened .
+CHAPTER 9 : IMMUTABLE OBJECTS
+    • An object is immutable if it's state can't change 
+    • Immutable object is useful in concurrent application as they cant be corrupted by threads.
+    • How to create an immutable class??
+        ◦ The class must be declared as final (So that child classes can’t be created)
+        ◦ Data members in the class must be declared as private (So that direct access is not allowed)
+        ◦ Data members in the class must be declared as final (So that we can’t change the value of it after object creation)
+        ◦ A parametrized constructor should initialize all the fields performing a deep copy (So that data members can’t be modified with object reference)
+        ◦ Deep Copy of objects should be performed in the getter methods (To return a copy rather than returning the actual object reference)
+        ◦ No setters (To not have the option to change the value of the instance variable)
+        ◦ public final class Student {
+              private final String name;
+              private final int regNo;
+              private final Map<String, String> metadata;
+           
+              public Student(String name, int regNo,
+                             Map<String, String> metadata)
+              {
+                  this.name = name;
+                  this.regNo = regNo;
+                  Map<String, String> tempMap = new HashMap<>();
+                  for (Map.Entry<String, String> entry :
+                       metadata.entrySet()) {
+                      tempMap.put(entry.getKey(), entry.getValue());
+                  }
+                  this.metadata = tempMap;
+              }
+           
+              public String getName() { return name; }
+           
+              public int getRegNo() { return regNo; }
+           
+              public Map<String, String> getMetadata()
+              {
+                  Map<String, String> tempMap = new HashMap<>();
+                  for (Map.Entry<String, String> entry :
+                       this.metadata.entrySet()) {
+                      tempMap.put(entry.getKey(), entry.getValue());
+                  }
+                  return tempMap;
+              }
+          }
+          class Test {
+              public static void main(String[] args)
+              {
+                  Map<String, String> map = new HashMap<>();
+                  map.put("1", "first");
+                  map.put("2", "second");
+                  Student s = new Student("ABC", 101, map);
+                  System.out.println(s.getName());
+                  System.out.println(s.getRegNo());
+                  System.out.println(s.getMetadata());
+                  map.put("3", "third");
+                  System.out.println(s.getMetadata()); 
+                  s.getMetadata().put("4", "fourth");
+                  System.out.println(s.getMetadata()); 
+              }
+          }
+CHAPTER 10 : HIGH LEVEL CONCURRENCY OBJECTS
+We will look at some high level concurrency features introduced in version 5.0 most of which are provided in java.util.concurrent.
+    • Lock Objects  : No doubt we have our traditional locking mechanism (synchronized method/block) . But the Lock interface provided by java.util.concurrent.lock is far more flexible and provides many options comparitively.
+        ◦ Synchronized block doesn't guarantee the sequence in which waiting threads will be given access .Lock interface can handle it.
+        ◦ Synchronized block has no option to timeout if lock is not granted in a specified time, Lock interface provides a function tryLock().
+        ◦ It provides a method lockInterruptibly() that acquires the lock until current thread is interrupted, it also backs out if another thread sends an interrupt to acquire the lock.
+    • Executor :  Java provides a multithreading framework called Executor , which consists of a bunch of components to efficiently manage worker threads.
+In an application where large number of threads are required ,It helps in thread pool creation and managementn as manual thread management can Be tedious .
+        ◦ Thread creation  : It provides various methods for creating pool of threads that our  application can use to run tasks concurrently.
+        ◦ Thread Management  : IT manages thread lifecycle in the thread pool.
+        ◦ Task submission :  Executor provides methods to decide when a task will be executed . It can be executed now or later or periodically.
+        ◦ java.util.concurrent provides following 3 executor interfaces :
+            ▪ Executor :  It launches a new thread using execute(Runnable command)
+            ▪ ExecutorService   : It is a subinterface of Executor that manages lifecycle of thredas . It  also provides submit() method who's overloaded versions can accept Runnable as well as Callable objects.
+            ▪ ScheduledExecutorService : A sub interface of ExecutorService that adds functionality to schedule the execution of tasks.
+CHAPTER 11 : CALLABLE AND FUTURE
+    • Thread can be created either by extending Thread class or by implementing Runnable as it is ideal to implement Runnable as seen in previous chapters it doesn't return any value though. So we use the Callable interface because it returns a value.​​​​​​​
+    • When the call() method completes, answer must be stored in an object known to the main thread, so that the main thread can know about the result that the thread returned. How will the program store and obtain this result later? For this, a Future object can be used.
+    • Think of a Future as an object that holds the result – it may not hold it right now, but it will do so in the future once the Callable returns.
+    • We need 3 functions to implement Future
+        ◦ public boolean cancel(boolean mayInterrupt): Used to stop the task. It stops the task if it has not started. If it has started, it interrupts the task only if mayInterrupt is true.
+        ◦ public Object get() throws InterruptedException, ExecutionException: Used to get the result of the task. If the task is complete, it returns the result immediately, otherwise it waits till the task is complete and then returns the result.
+        ◦ public boolean isDone(): Returns true if the task is complete and false otherwise.
+        ◦ import java.util.Random; 
+import java.util.concurrent.Callable; 
+import java.util.concurrent.FutureTask; 
+          class CallableExample implements Callable 
+{ 
+          public Object call() throws Exception 
+{ 
+    Random generator = new Random(); 
+    Integer randomNumber = generator.nextInt(5); 
+              Thread.sleep(randomNumber * 1000); 
+              return randomNumber; 
+} 
+          } 
+          public class CallableFutureTest 
+{ 
+public static void main(String[] args) throws Exception 
+{
+    FutureTask[] randomNumberTasks = new FutureTask[5]; 
+              for (int i = 0; i < 5; i++) 
+    { 
+    Callable callable = new CallableExample(); 
+    randomNumberTasks[i] = new FutureTask(callable); 
+    Thread t = new Thread(randomNumberTasks[i]); 
+    t.start(); 
+    } 
+              for (int i = 0; i < 5; i++) 
+    { System.out.println(randomNumberTasks[i].get());     } 
+        ◦ } 
+} 
+        ◦ The Java library has the concrete type FutureTask, which implements Runnable and Future, combining both functionality conveniently.
+        ◦ A FutureTask can be created by providing its constructor with a Callable. Then the FutureTask object is provided to the constructor of Thread to create the Thread object. Thus, indirectly, the thread is created with a Callable.
+        ◦ Note that we can not directly create a thread with callable as Thread constructor can either rake Runnable object or NO object or group of threads as argument.
+CHAPTER 12 : THREAD POOLS
+    • Most of the executor implementations in java.util.concurrent use thread pools, which consist of worker threads. This kind of thread exists separately from the Runnable and Callable tasks it executes and is often used to execute multiple tasks.
+    • Using worker threads minimizes the overhead due to thread creation. Thread objects use a significant amount of memory, and in a large-scale application, allocating and deallocating many thread objects  manually creates a significant memory management overhead.
+    • One common type of thread pool is the fixed thread pool. This type of pool always has a specified number of threads running; if a thread is somehow terminated while it is still in use, it is automatically replaced with a new thread. Tasks are submitted to the pool via an internal queue, which holds extra tasks whenever there are more active tasks than threads.To create a pool of fixed Threads newFixedThreadPool()  factory method in java.util.concurrent.Executors
+    • The newCachedThreadPool()  method creates an executor with an expandable thread pool. This executor is suitable for applications that launch many short-lived tasks.
+    • The newSingleThreadExecutor()  method creates an executor that executes a single task at a time.
+ 
+CHAPTER 13 : FORK/JOIN
+    • Fork/Join is very similar to ExecutorService , it submits the task ,executes the task and fetches the return value (optional).
+    • How is it different than ExecutorService?
+        ◦ It deals with tasks that produce subtasks  which run parallely on different cores. The result from each subtask is aggregated to form the final result.
+        ◦ Each thread has it's own queue(dequeue) that keeps track of the tasks assigned that queue.
+        ◦ Fork/Join performs work stealing . Suppose Thread1 has executed all of the tasks in it's local queue and is sitting idle but their are few tasks remaining for Thread2 .In this case Thread1 steals tasks from Thread2 .If Thread2 pics it's tasks from front end of queue , Thread1 will steal from rear end.
+Edit
+
+
+
