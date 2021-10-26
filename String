@@ -1,0 +1,20 @@
+1. Strings in Java are Objects that are backed internally by a char array.
+
+2. Strings are immutable
+
+3. Whenever a change to a String is made, an entirely new String is created. 
+
+4. Whenever a String Object is created as a literal, the object will be created in String constant pool.
+    e.g. String str = "Geeks"
+    
+5. As soon as we write the below command
+    String s=”Welcome”; JVM checks the String Constant Pool. If the string does not exist, then a new string instance is created and placed in a pool. 
+    If the string exists, then it will not create a new object. Rather, it will return the reference to the same instance. 
+    
+5. Strings declared using "new" are allocated dynamically in heap memory.
+    String str = new String("Geeks");
+    
+6.StringBuffer is a peer class of String which represents growable and writable character sequences .StringBuffer is synchronized
+   StringBuffer s = new StringBuffer("GeeksforGeeks");
+   
+7.StringBuilder in Java just like StringBuffer represents a mutable sequence of characters.It is not thread safe.
