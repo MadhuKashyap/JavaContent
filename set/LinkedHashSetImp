@@ -1,0 +1,29 @@
+package main.set;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class LinkedHashSetImp {
+    public static void main(String[] args) {
+        Set<Integer> s=new LinkedHashSet<>();
+
+        //LinkedHashSet implementation of Set is ordered
+        s.add(1);
+        s.add(2);
+        s.add(3);
+        s.add(6);
+        s.add(0);
+        s.add(22);
+        s.add(11);
+        s.add(21);
+        s.add(31);
+        s.add(12);
+        s.add(23);
+        s.add(35);
+        Iterator it=s.iterator();
+        System.out.println(s);
+    }
+}
+

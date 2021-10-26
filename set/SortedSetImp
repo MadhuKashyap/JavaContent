@@ -1,0 +1,25 @@
+package main.set;
+
+import java.util.*;
+
+public class SortedSetImp {
+    public static void main(String[] args) {
+        //SortedSet is an interface and TreeSet implements SortedSet, It is a sorted collection of items.
+        SortedSet<Integer> s=new TreeSet<>();
+        s.add(1);
+        s.add(2);
+        s.add(3);
+        s.add(6);
+        s.add(0);
+        s.add(22);
+        s.add(11);
+        s.add(21);
+        s.add(31);
+        s.add(12);
+        s.add(23);
+        s.add(35);
+        Iterator it=s.iterator();
+        System.out.println(s);
+    }
+}
+
