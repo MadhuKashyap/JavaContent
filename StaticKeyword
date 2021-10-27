@@ -1,0 +1,55 @@
+STATIC VARIABLE : 
+    1. The static variable gets memory only once in the class area at the time of class loading.
+    2. It has class scope.
+    3. It's value is shared among all class objects.
+    
+    4. If you need to initialize your static variables, you can declare a static block that gets executed exactly once, when the class is first loaded.
+    5. It is accessed using class name and '.' operator.
+    
+    
+STATIC METHODS : 
+    1. It is accessed using class name and '.' operator.
+    2. It can access only static variables.
+    3. super and this keywords cant be used inside static methods.
+    4. They can only directly call other static methods.
+    
+    class Test
+  {
+    
+    static int a = 10;
+    int b = 20;
+    
+    static void m1()
+    {
+        a = 20;
+        System.out.println("from m1");
+        
+         b = 10; // compilation error   Cannot make a static reference to the non-static field b
+     
+         m2();  // compilation error  Cannot make a static reference to the  non-static method m2() from the type Test
+          
+         System.out.println(super.a); // compiler error Cannot use super in a static context
+    }
+  }
+
+STATIC BLOCK : 
+    
+    1. static block executes automatically when the class is loaded in memory.
+    2. It is executed before main() and even constructors .
+    3. It can only access static variables.
+    
+    
+STATIC CLASS : 
+    1. Classes can be static too provided that they are nested classes.
+    2. It can only access static members of outer class.
+    3. Static nested class can be instantiated without instantiating outer class.
+    4. It's object is created with the format Outercalss.Innerclass obj=new Outercalss.Innerclass();
+    
+    
+    
+    
+    
+    
+    
+    
+    
