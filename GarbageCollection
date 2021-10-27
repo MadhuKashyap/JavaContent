@@ -1,0 +1,25 @@
+1. In C/C++, programmer is responsible for both creation and destruction of objects. Usually programmer neglects destruction of useless objects. Due to this 
+    negligence, at certain point, for creation of new objects, sufficient memory may not be available and entire program will terminate abnormally causing
+    OutOfMemoryErrors.
+    
+2. But in Java, the programmer need not to care for all those objects which are no longer in use. Garbage collector destroys these objects.
+
+3.  An object is said to be eligible for GC(garbage collection) iff it is unreachable. 
+      Integer i = new Integer(4);                 // the new Integer object is reachable  via the reference in 'i' It points to Integer object valued 4 in heap area
+       i = null;                                  // the Integer object is no longer reachable and Integer object valued 4 in heap area can be collected as garbage.
+       
+       Therefore we can Nullify the reference variable to get it collected.
+  
+ 4. Once we made object eligible for garbage collection, it may not destroy immediately by the garbage collector. Whenever JVM runs the Garbage Collector program
+     periodically then only the object will be destroyed. 
+     
+5. We can also make JVM to run Garbage collecter Using System.gc() method .
+
+6. Just before destroying an object, Garbage Collector calls finalize() method on the object to perform cleanup activities. Once finalize() method completes, 
+    Garbage Collector destroys that object.
+    finalize() method is present in Object class with following prototype.
+        protected void finalize() throws Throwable
+  
+7. JVM calls Garbage Collecter which in turn calls finalize() to perform clean up activities.
+
+8. 
