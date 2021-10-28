@@ -1,0 +1,39 @@
+1. singleton class is a class that can have only one object (an instance of the class) at a time.
+2. After first time, if we try to instantiate the Singleton class, the new variable also points to the first instance created. 
+3. We can make a class singleton by: 
+      3.1 Make constructor as private.
+      3.2 Write a static method that has return type object of this singleton class.
+     
+4. For singleton class we use getInstance() method instaed of constructor to instantiate.
+  `         class Singleton 
+          {
+              private static Singleton single_instance = null;
+ 
+              public String s;
+ 
+              private Singleton()
+              {
+                  s = "Hello I am a string part of Singleton class";
+               }
+                public static Singleton getInstance()
+             {
+                  if (single_instance == null)
+                  single_instance = new Singleton();
+ 
+                  return single_instance;
+              }
+         }
+         
+         class GFG {
+    public static void main(String args[])
+    {
+        Singleton x = Singleton.getInstance();
+        Singleton y = Singleton.getInstance();
+        Singleton z = Singleton.getInstance();
+        System.out.println("Hashcode of x is "+ x.hashCode());
+        System.out.println("Hashcode of y is "+ y.hashCode());                    
+        System.out.println("Hashcode of z is " + z.hashCode());
+    }
+    //All hashcodes are same.                 
+                    
+ 
