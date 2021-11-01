@@ -97,9 +97,11 @@
 
             public static Something getInstance() {
             return LazyHolder.INSTANCE;
-    }
-}
+            }
+      }
       
+We know that class can be loaded by a single thread only , So whenever in main function we encounter something like Something s=new Something , class Something
+is loaded and when 2 threads simlutaneously call getInstance() ,only 1 thread can actually call it and initialize the final variable.
                   
                   
      
