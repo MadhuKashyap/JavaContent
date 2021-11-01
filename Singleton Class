@@ -9,16 +9,13 @@
           {
               private static Singleton single_instance = null;
  
-              public String s;
- 
               private Singleton()
               {
-                  s = "Hello I am a string part of Singleton class";
                }
                 public static Singleton getInstance()
              {
                   if (single_instance == null)
-                  single_instance = new Singleton();
+                        single_instance = new Singleton();
  
                   return single_instance;
               }
@@ -34,6 +31,59 @@
         System.out.println("Hashcode of y is "+ y.hashCode());                    
         System.out.println("Hashcode of z is " + z.hashCode());
     }
-    //All hashcodes are same.                 
-                    
+    //All hashcodes are same.     
+         
+5. In order to make it thread safe we can modify the getInstance() , we can follow 2 approaches
+      5.1 Lazy loading 
+    
+         public synchronised static Singleton getInstance()
+             {
+                  if (single_instance == null)
+                        single_instance = new Singleton();
+ 
+                  return single_instance;
+              }
+              
+      5.2 Early loading
+      
+             public static Singleton getInstance()
+            {
+                  return ref;
+            }
+
+            private static SingletonObject ref = new SingletonObject();
+         
+            This singleton is instantiated when the class is loaded .         
+           
+           
+  6. DOUBLE CHECKED LOADING
+  
+     6.1 The DCL idiom was designed to support lazy initialization, which occurs when a class defers initialization of an owned object until it is actually needed
+     
+     6.2 We saw above that synchronised methods can be used to save our code from multithreading
+     
+     6.3 But synchronized methods run much slower -- as much as 100 times slower -- than ordinary unsynchronized methods
+     
+     6.4 DCL purports to give us the best of both worlds. Using DCL, the getInstance() method would look like this:
+            class SomeClass 
+            {
+                        private Resource resource = null;
+                        public Resource getInstance() {
+                                    if (resource == null) {
+                                          synchronized {
+                                                if (resource == null) 
+                                                      resource = new Resource();
+                                          }
+                                    }
+                              return resource;
+                        }
+              }
+    6.5 DCL relies on an unsynchronized use of the resource field. That appears to be harmless, but it is not. 
+            6.5.1 imagine that thread A is inside the synchronized block, executing the statement resource = new Resource()
+            6.5.2 Memory for the new Resource object will be allocated; the constructor for Resource will be called, initializing the member fields of the new 
+                  object; and the field resource of Singleton will be assigned a reference to the newly created object.
+            6.5.3 Suppose thread B comes along after the memory has been allocated and the resource field is set, but before the constructor is called. It sees 
+                  that resource is not null, skips the synchronized block, and returns a reference to a partially constructed Resource
+                  
+     
  
