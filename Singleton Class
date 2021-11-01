@@ -84,6 +84,23 @@
                   object; and the field resource of Singleton will be assigned a reference to the newly created object.
             6.5.3 Suppose thread B comes along after the memory has been allocated and the resource field is set, but before the constructor is called. It sees 
                   that resource is not null, skips the synchronized block, and returns a reference to a partially constructed Resource
+        
+7. Best solution is "Initialisation on demand"     ,the initialization-on-demand holder (design pattern) idiom is a lazy-loaded singleton. 
+      In all versions of Java, the idiom enables a safe, highly concurrent lazy initialization of static fields with good performance   
+      
+      public class Something {
+            private Something() {}
+
+            private static class LazyHolder {
+                  static final Something INSTANCE = new Something();
+            }
+
+            public static Something getInstance() {
+            return LazyHolder.INSTANCE;
+    }
+}
+      
+                  
                   
      
  
