@@ -1,0 +1,44 @@
+1. So let us first understand what is wrong with our classic hashmap in a multi-threaded environment.
+
+2. For every hashmap there is a property called load factor which is by default set to 0.75, what that means is, if the bucket list is 75% of the capacity full, 
+    rehashing of the hashmap is done with new bucket with double the capacity and the values from the old bucket are then added to the new bucket.
+  
+3. Rehashing has following steps : 
+      3.1 A new bucket list is created with double the size.
+      3.2 Key-Value pairs in old bucket is transferred to the new bucket.
+      3.3 Key-Value pairs are added to the new bucket in reverse order.
+      
+4. Assuming there are 2 threads ThreadA and ThreadB and both of them are accessing the same HashMap with 12 elements in it. 
+      4.1 Suppose ThreadA has the cpu and it sees that loadfactor is reached and calls for rehashing , it creates a new bucket with double the capacity and now it 
+          is ready for the transferring of the nodes, let the node be 10->12->null , it creates two pointer assume the pointer names to be current and next where 
+          current pointer will point to the node being transferred and next points to the next node to be transferred. In the above scenario current = 10 & next=12
+          But ThreadA looses the CPU time, remember that context switching occurs and ThreadB gets the chance.
+          
+      4.2 ThreadB gets the complete CPU time to complete the transferring process now the node list in the new bucket will appear like this 12->10->null
+      
+      4.3 Now ThreadA gets the chance as the context of ThreadA is loaded again , before giving control to ThreadB the current and next pointer were pointing to 1st node 
+          and 2nd node respectively.
+          
+      4.4 So ThreadA will add 12 to next of 10 and again 10 to next of 12 .
+      4.5 Hence any get()/put() call will end up in infinite loop as ThreadB has reversed the order.
+      
+5. Better option is ConcurrentHashmap of java.util.concurrent package.
+6. The underlined data structure for ConcurrentHashMap is Hashtable.
+7. At a time any number of threads are applicable for a read operation without locking the ConcurrentHashMap object which is not there in HashMap.
+8. In ConcurrentHashMap, the Object is divided into a number of segments according to the concurrency level, default concurrency level is 16
+9. A thread must lock the particular segment in which the thread wants to operate. This type of locking mechanism is known as Segment locking or bucket locking. 
+    Hence at a time, 16 update operations can be performed by threads.
+10. Constructors for ConcurrentHashmap
+      10.1 ConcurrentHashMap(): Creates a new, empty map with a default initial capacity (16), load factor (0.75) and concurrencyLevel (16).
+      10.2 ConcurrentHashMap(int initialCapacity): Creates a new, empty map with the specified initial capacity, and with default load factor (0.75) and 
+            concurrencyLevel (16).
+      10.3  ConcurrentHashMap(int initialCapacity, float loadFactor): Creates a new, empty map with the specified initial capacity and load factor and with the 
+            default concurrencyLevel (16).
+      10.4 ConcurrentHashMap(int initialCapacity, float loadFactor, int concurrencyLevel): Creates a new, empty map with the specified initial capacity, 
+            load factor, and concurrency level.
+            
+            
+            
+
+ 
+
