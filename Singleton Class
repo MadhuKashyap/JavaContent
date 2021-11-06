@@ -32,6 +32,8 @@
         System.out.println("Hashcode of z is " + z.hashCode());
     }
     //All hashcodes are same.     
+    
+However this approach is not thread safe , if more than 1 thread tries to access getInstance() it will result in creation of two objects of Singleton class.
          
 5. In order to make it thread safe we can modify the getInstance() , we can follow 2 approaches
       5.1 Lazy loading 
@@ -85,11 +87,12 @@
             6.5.3 Suppose thread B comes along after the memory has been allocated and the resource field is set, but before the constructor is called. It sees 
                   that resource is not null, skips the synchronized block, and returns a reference to a partially constructed Resource
         
-7. Best solution is "Initialisation on demand"     ,the initialization-on-demand holder (design pattern) idiom is a lazy-loaded singleton. 
+7. Best solution is "Initialisation on demand"   ,the initialization-on-demand holder (design pattern) idiom is a lazy-loaded singleton. 
       In all versions of Java, the idiom enables a safe, highly concurrent lazy initialization of static fields with good performance   
       
       public class Something {
             private Something() {}
+       
 
             private static class LazyHolder {
                   static final Something INSTANCE = new Something();
@@ -103,6 +106,6 @@
 We know that class can be loaded by a single thread only , So whenever in main function we encounter something like Something s=new Something , class Something
 is loaded and when 2 threads simlutaneously call getInstance() ,only 1 thread can actually call it and initialize the final variable.
                   
-                  
-     
+     .             
+     .
  
