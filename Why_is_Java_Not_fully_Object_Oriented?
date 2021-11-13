@@ -1,0 +1,15 @@
+1. Java language is not a Pure Object Oriented Language as it contains Primitive Data Type like  int, long, bool, float, char.
+
+2.  Wrapper class provides the mechanism to convert primitive into object and object into primitive.
+
+3. A Wrapper class is a class whose object wraps or contains primitive data types into wrapper class objects.
+
+4. Autoboxing: Automatic conversion of primitive types to the object of their corresponding wrapper classes is known as autoboxing. 
+       char ch = 'a';
+       Character a = ch;
+       
+5. Unboxing: Automatically converting an object of a wrapper class to its corresponding primitive type is known as unboxing
+      Character a = 'a';
+      char ch=a
+ 
+  
