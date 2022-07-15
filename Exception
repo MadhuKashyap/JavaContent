@@ -1,0 +1,54 @@
+                                                    Exception :
+
+An event, which occurs during the execution of a program, that disrupts the normal flow of the program's instructions
+
+                                                Checked Exception : 
+
+A checked exception is caught at compile time . A checked exception must be handled either by re-throwing or with a try catch block, e.g. IOException
+FileReader fr = new FileReader("C://Desktop/user)   //Throws file not found execption when a file is not found in the specified path
+
+public class Main
+{
+  public void method throws FileNotFoundException
+  {
+    FileReader fr = new FileReader("C://Desktop/user)
+  }
+}
+
+          OR
+ 
+public class Main
+{
+  public void method 
+  {
+    try
+    {
+      FileReader fr = new FileReader("C://Desktop/user)
+    }
+    catch(Exception e)
+    {
+      sout ("No");
+    }
+  }
+}
+                                            Unchecked Exception : 
+
+Exception that occurs at run time.  An unchecked isn't required to be handled. It is a logic error by the user. e.g. NullPointer, Arithematic, ArrayOndexOutOfBound
+
+                                            User Defined Exception
+                                           
+User can define their own execptions 
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "no user found for given id")
+public class NoSuchUserException extends Exception{
+    public NoSuchUserException(String message)
+    {
+        super(message);
+    }
+}
+
+
+
+
+
+
