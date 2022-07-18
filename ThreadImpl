@@ -1,0 +1,77 @@
+THREAD CONCEPTS
+
+16. Race Condition
+
+A race condition occurs when two or more threads can access shared data and they try to change it at the same time. Because the thread scheduling algorithm can swap between threads at any time, you don't know the order in which the threads will attempt to access the shared data. So each time a part of code with a shared resource is executed, it delivers different result.
+
+17 Mutex lock
+
+The usual solution to avoid race condition is to serialize access to the shared resource.
+
+Mutual exclusion locks (mutexes) can prevent data inconsistencies due to race conditions.
+
+
+
+
+18 Deadlock
+
+	A deadlock is a situation in which two threads sharing the same resource are effectively preventing each other from accessing the resource, resulting in both threads ceasing to function. 
+
+
+19. pthread
+
+	c++ provides pthread API to implement all thread related functions
+
+19.1 :  pthread_create() : used to create a new thread
+	SYNTAX :
+           (pthread_t * thread, const pthread_attr_t * attr, void * (*start_routine)(void *) , void * args) 
+	
+	thread: pointer to an unsigned integer value that returns the thread id of the thread created.
+
+attr: pointer to a structure that is used to define thread attributes like detached state, scheduling policy, stack address, etc. Set to NULL for default thread attributes.
+
+start_routine: pointer to a subroutine that is executed by the thread. The return type and parameter type of the subroutine must be of type void *. 
+	args : other arguments to the function
+
+
+19.2 : pthread_exit(): used to terminate a thread
+	SYNTAX :
+	void pthread_exit(void *retval);
+
+	Parameters: This method accepts a mandatory parameter retval which is the pointer to an integer that stores the return status of the thread 		terminated. The scope of this variable must be global so that any thread waiting to join this thread may read the return status.
+      
+  
+19.3 pthread_join(): used to wait for the termination of a thread.
+	Syntax:
+	int pthread_join(pthread_t th, void **thread_return);
+
+	th: thread id of the thread for which the current thread waits.
+   thread_return: pointer to the location where the exit status of the thread mentioned in th is stored.
+
+
+19.4 pthread_cancel(): used to send a cancellation request to a threadSyntax: 	int pthread_cancel(pthread_t thread);
+ Parameter: This method accepts a mandatory parameter thread which is the thread id of the thread to which cancel request is sent.
+
+
+19.5 pthread_t : Contains id of a thread
+
+19.6 pthread_mutex_t : Contains id of a mutex
+
+19.7 pthread_mutex_lock(pthread_mutex_t  mutex)  : Locks a mutex object which identifies a mutex. If the mutex is already locked by another thread, the thread waits for the mutex to become available. The thread that locks a mutex becomes its current owner and owns it until it manually unlocks it. 
+
+19.8 pthread_mutex_unlock(&mutex) : Unlocks a mutex object which identifies a mutex.
+
+19.8 Thread macros : 
+  	PTHREAD_MUTEX_INITIALIZER : Similar to pthread_mutex_init(). Returns 0 after successful mutex creation and -1 otherwise
+	
+	#define PTHREAD_COND_INITIALIZER {_PTHREAD_COND_SIG_init, {0}}
+	PTHREAD_COND_INITIALIZER macro initializes the static condition variable cond, setting its attributes to default values.
+
+
+19.9 pthread_cond_t : represents a condition variable , used for  conditions like thread blocking , releasing threads etc
+
+19.10 pthread_cond_broadcast( pthread_cond_t cold) : unblocks all threads currently blocked on the specified condition variable cond. In our scenario, this thread will notify all threads waiting for a data to be pushed in the queue.
+
+19.11 pthread_cond_wait(cond) : This condition variable is used when we want to make a thread sleep. It unlocks the mutex just before it sleeps
+
+19.12 pthread_cond_signal(cond) : is used to wake up sleeping or waiting thread on a particular condition cond. Wait and signal / notify are used between threads for communication
